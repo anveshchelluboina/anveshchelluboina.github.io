@@ -259,17 +259,8 @@ h4{font-size:var(--font-subheading);line-height:1.3}
   .lightbox-nav{width:44px;height:44px}
 }
 
-/* Quiet travel-journal details */
-.hero{position:relative}
-.hero-route{position:absolute;z-index:3;top:17px;left:52%;width:180px;height:40px;overflow:visible;pointer-events:none}
-.flight-route-line,.journal-route path{fill:none;stroke:var(--brass);stroke-width:1.5;stroke-dasharray:1 6;stroke-linecap:round}
-.flight-plane-static path,.flight-plane-motion path{fill:var(--green)}
-.flight-plane-motion{opacity:0}
-@supports (offset-path:path("M 0 0 L 1 1")){
-  .flight-plane-static{display:none}
-  .flight-plane-motion{opacity:1;offset-path:path("M 8px 31px C 48px 0px 132px 0px 172px 31px");offset-anchor:center;offset-rotate:auto;animation:travel-flight 24s linear infinite}
-}
-@keyframes travel-flight{to{offset-distance:100%}}
+.journal-route path{fill:none;stroke:var(--brass);stroke-width:1.5;stroke-dasharray:1 6;stroke-linecap:round}
+.journal-route circle{fill:var(--brass)}
 .travel-invitation{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:38px;margin:42px 0 35px;padding:27px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .invitation-copy{max-width:720px}
 .invitation-copy h3{margin:8px 0 9px;font:500 clamp(23px,2.5vw,30px)/1.2 var(--serif);color:var(--ink)}
@@ -289,10 +280,7 @@ h4{font-size:var(--font-subheading);line-height:1.3}
 .music-toggle[aria-pressed="true"]:after{background:var(--brass);box-shadow:0 0 0 4px rgba(181,141,82,.16);animation:music-pulse 1.8s ease-in-out infinite}
 @keyframes music-pulse{50%{box-shadow:0 0 0 7px rgba(181,141,82,0)}}
 .music-status{display:block;min-height:1.4em;color:var(--muted);font-size:11px;line-height:1.4}
-.journal-route{display:block;width:100%;height:30px;margin:3px 0 13px;overflow:visible;pointer-events:none}
-.journal-route circle{fill:var(--brass)}
 @media(max-width:760px){
-  .hero-route{position:relative;top:auto;left:auto;grid-column:1;justify-self:end;width:min(180px,55vw);height:40px;margin:-18px 0 -18px}
   .travel-invitation{grid-template-columns:1fr;gap:20px;margin-top:30px;padding:23px 0}
   .invitation-aside{flex-direction:row;align-items:center;justify-content:space-between;gap:15px}
 }
@@ -300,9 +288,29 @@ h4{font-size:var(--font-subheading);line-height:1.3}
   .invitation-aside{align-items:flex-start;flex-direction:column}
   .invitation-actions{gap:16px}
   .invitation-actions .text-link{font-size:13px}
-  .journal-route{height:22px}
 }
 @media(prefers-reduced-motion:reduce){
-  .flight-plane-motion{display:none!important}
-  .flight-plane-static{display:block!important}
+  .passport-route-plane{display:none!important}
+  .passport-plane-still{display:block!important}
+  .passport-fallback-cover{transition:none!important}
+  .passport-ink-stamp{animation:none!important}
+}
+@media(max-width:640px){
+  .hero-art{height:400px;max-width:440px}
+  .hero-photo-main{inset:0 15px 20px 36px}
+  .hero-photo-small{width:37%;height:36%}
+  .passport-fallback-cover{left:58%;width:min(225px,58%)}
+  .passport-caption{right:auto;left:4px;bottom:51px;padding:7px 9px}
+  .passport-caption b{font-size:9px}
+  .passport-caption small{font-size:9px}
+  .passport-stamp-button{right:1px;font-size:11px}
+  .passport-cover-country{font-size:8px}
+  .passport-cover-title{font-size:clamp(19px,6vw,27px)}
+  .passport-cover-edition{font-size:7px}
+}
+@media(max-width:380px){
+  .hero-art{height:360px}
+  .passport-fallback-cover{width:56%}
+  .passport-caption{bottom:48px}
+  .passport-stamp-button{min-height:42px;padding-inline:9px}
 }

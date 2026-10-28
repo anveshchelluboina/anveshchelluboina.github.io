@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <script>document.documentElement.classList.add("js")</script>
   <link rel="stylesheet" href="flapboard.css">
+  <link rel="stylesheet" href="assets/passport-hero.css">
   <script src="flapboard.js" defer></script>
 </head>
 <body>
@@ -23,7 +24,9 @@
   </header>
 
   <main id="top">
+    <div id="hero-root">
     <section class="hero section-wrap">
+      <div class="passport-flight-layer" aria-hidden="true"><svg class="passport-flight-svg" viewBox="0 0 520 470" preserveAspectRatio="none" focusable="false"><path class="passport-route" d="M 18 372 C 106 380 102 300 180 300 S 250 360 318 310 382 120 510 112"/><path class="passport-route passport-route-secondary" d="M 12 116 C 118 92 155 206 248 214 S 376 228 500 350"/><circle class="passport-waypoint" cx="318" cy="310" r="4" style="animation-play-state:paused"/><path class="passport-plane-still" d="M12 364 14 370 21 373 21 375 14 374 13 380 11 380 11 374 5 375 5 373 11 370Z"/></svg></div>
       <div class="hero-copy">
         <p class="eyebrow"><span class="eyebrow-line"></span> Dubai, UAE · Open to meaningful opportunities</p>
         <h1><span class="line"><span>Good work.</span></span><span class="line"><em>Curious journeys.</em></span></h1>
@@ -31,18 +34,21 @@
         <div class="hero-actions"><a class="button button-dark" href="#contact">Get in touch <span>↘</span></a><a class="text-link" href="#work">Explore my services <span>↘</span></a></div>
         <div class="hero-facts"><div><strong data-count>12+</strong><span>years in engineering & operations</span></div><div><strong>MSc</strong><span>Project Management · Merit</span></div><div><strong data-count>24</strong><span>countries explored</span></div></div>
       </div>
-      <svg class="hero-route" viewBox="0 0 180 40" aria-hidden="true" focusable="false">
-        <path class="flight-route-line" d="M8 31 C48 0 132 0 172 31" />
-        <g class="flight-plane-static" transform="translate(8 31)"><path d="M0-7 2-1 8 1 8 3 2 2 1 7-1 7-1 2-6 3-6 1-1-1Z" /></g>
-        <g class="flight-plane-motion"><path d="M0-7 2-1 8 1 8 3 2 2 1 7-1 7-1 2-6 3-6 1-1-1Z" /></g>
-      </svg>
-      <div class="hero-art" aria-label="Travel photography collage">
-        <div class="hero-photo hero-photo-main"><img src="assets/photos/travel-39.jpg" alt="Anvesh at a mountain viewpoint above a valley" width="937" height="1400" fetchpriority="high" decoding="async"></div>
-        <div class="hero-photo hero-photo-small"><img src="assets/photos/travel-12.jpg" alt="The Eiffel Tower in Paris" width="956" height="1301" decoding="async"></div>
-        <div class="hero-note"><span class="note-star">✳</span><span>Stay curious.<br>Keep moving.</span></div>
-        <div class="hero-stamp">FIELD<br>NOTES<br><span>01 / 24</span></div>
-      </div>
+      <div class="hero-visual" role="group" aria-label="Interactive travel passport"><div class="passport-viewer">
+        <div class="passport-viewer-route" aria-hidden="true"></div>
+        <div class="passport-object-slot"><div class="passport-cover-stage">
+          <button type="button" class="passport-cover passport-cover-button" aria-label="Open the travel passport and reveal its country stamps">
+            <span class="gold-foil passport-cover-country">UNITED ARAB EMIRATES</span>
+            <svg class="passport-cover-emblem" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="43"/><circle cx="50" cy="50" r="34"/><path d="M22 50q28-22 56 0-28 22-56 0zm28-27c-16 17-16 37 0 54 16-17 16-37 0-54zm-27 27h54"/></svg>
+            <span class="gold-foil passport-cover-title">PASSPORT</span><span class="gold-foil passport-cover-edition">FIELD NOTES · 24 COUNTRIES</span><span class="gold-foil passport-cover-owner">ANVESH CHELLUBOINA</span><span class="gold-foil passport-cover-hint">OPEN TO EXPLORE · 24 COUNTRIES</span>
+            <span class="passport-ink-stamps" aria-hidden="true"></span>
+          </button>
+        </div></div>
+        <div class="passport-viewer-caption"><span>FIELD NOTES</span><span>24 COUNTRIES EXPLORED</span></div>
+        <span class="sr-only" role="status" aria-live="polite">Passport closed.</span>
+      </div></div>
     </section>
+    </div>
 
     <section class="ticker" aria-label="Areas of interest"><div class="ticker-track"><span>Engineering operations</span><i>✳</i><span>Project coordination</span><i>✳</i><span>People-first service</span><i>✳</i><span>Budget travel</span><i>✳</i><span>Engineering operations</span><i>✳</i><span>Project coordination</span><i>✳</i><span>People-first service</span><i>✳</i><span>Budget travel</span></div></section>
 

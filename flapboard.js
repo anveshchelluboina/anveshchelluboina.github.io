@@ -343,6 +343,21 @@
     });
   }
 
+  function initPassportHero() {
+    const root = $("#hero-root");
+    if (!root) return;
+    const mount = () => import("./assets/passport-hero.js").catch(error => {
+      console.error("The interactive passport module could not be loaded; keeping the static hero fallback.", error);
+    });
+    if (!("IntersectionObserver" in window)) { mount(); return; }
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      observer.disconnect();
+      mount();
+    }, { rootMargin: "160px" });
+    observer.observe(root);
+  }
+
   function initSlides() {
     const deck = $("#slide-deck");
     if (!deck) return;
@@ -583,6 +598,7 @@
     initTicker();
     initGallery();
     initMusic();
+    initPassportHero();
     initSlides();
     initReviewForm();
     initBooking();
