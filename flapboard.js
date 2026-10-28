@@ -176,7 +176,7 @@
     observer.observe(booking);
   }
 
-  function initGallery() {
+  function initGallery(playAmbientMusic) {
     const grid = $("#photo-grid");
     if (!grid) return;
     const filters = $$(".filter-chip");
@@ -232,6 +232,7 @@
       updateLightbox();
       lightbox.classList.add("is-open");
       lightbox.setAttribute("aria-hidden", "false");
+      if (playAmbientMusic) void playAmbientMusic();
       previousOverflow = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       $(".lightbox-close", lightbox).focus();
@@ -324,12 +325,8 @@
       status.textContent = "Add assets/audio/travel-journal-ambient.mp3 to enable the optional soundtrack.";
       updatePlaybackState();
     });
-    button.addEventListener("click", async () => {
-      if (!audio.paused) {
-        audio.pause();
-        status.textContent = "Ambient music paused.";
-        return;
-      }
+    async function playAmbientMusic() {
+      if (!audio.paused) return;
       status.textContent = "Loading ambient music…";
       try {
         await audio.play();
@@ -340,7 +337,17 @@
           : "Playback could not start. Please try again.";
         updatePlaybackState();
       }
+    }
+
+    button.addEventListener("click", async () => {
+      if (!audio.paused) {
+        audio.pause();
+        status.textContent = "Ambient music paused.";
+        return;
+      }
+      await playAmbientMusic();
     });
+    return playAmbientMusic;
   }
 
   function initPassportHero() {
@@ -596,8 +603,8 @@
     initReveal();
     initCounters();
     initTicker();
-    initGallery();
-    initMusic();
+    const playAmbientMusic = initMusic();
+    initGallery(playAmbientMusic);
     initPassportHero();
     initSlides();
     initReviewForm();
