@@ -13,9 +13,9 @@
     {src:"travel-09.jpg",caption:"A city square beneath a stormy sky",alt:"An equestrian statue in a broad city square beneath storm clouds",category:"cities"},
     {src:"travel-10.jpg",caption:"A journey in motion",alt:"Anvesh taking a selfie beside a Wizz Air airplane",category:"ontheroad"},
     {src:"travel-11.jpg",caption:"A portrait beneath the Eiffel Tower",alt:"Anvesh posing with the Eiffel Tower behind him",category:"cities"},
-    {src:"travel-12.jpg",caption:"Paris, in a frame",alt:"The Eiffel Tower in Paris",category:"cities"},
+    {src:"travel-12.jpg",caption:"Paris, in a frame",alt:"The Eiffel Tower in Paris",category:"cities",location:"PARIS"},
     {src:"travel-13.jpg",caption:"City lines",alt:"A city road and skyline framed by a large circular arch",category:"cities"},
-    {src:"travel-14.jpg",caption:"A city walk in Dubai",alt:"Anvesh standing before Dubai's modern skyline",category:"cities"},
+    {src:"travel-14.jpg",caption:"A city walk in Dubai",alt:"Anvesh standing before Dubai's modern skyline",category:"cities",location:"DUBAI"},
     {src:"travel-15.jpg",caption:"By the water",alt:"Anvesh beside the water with a coastal skyline behind him",category:"ontheroad"},
     {src:"travel-16.jpg",caption:"Twin towers at golden hour",alt:"Two modern city towers in warm evening light",category:"cities"},
     {src:"travel-17.jpg",caption:"A green corner",alt:"Anvesh seated on a bench among garden trees",category:"ontheroad"},
@@ -23,7 +23,7 @@
     {src:"travel-19.jpg",caption:"Desert air",alt:"Anvesh with arms outstretched on a desert hillside",category:"ontheroad"},
     {src:"travel-20.jpg",caption:"A walk through town",alt:"Anvesh standing on a cobbled city street",category:"cities"},
     {src:"travel-21.jpg",caption:"A falconry moment in the desert",alt:"A falcon perched on Anvesh's arm in a sandy landscape",category:"culture"},
-    {src:"travel-22.jpg",caption:"Fireworks above the city",alt:"Fireworks lighting the Burj Khalifa above the downtown crowd",category:"cities"},
+    {src:"travel-22.jpg",caption:"Fireworks above the city",alt:"Fireworks lighting the Burj Khalifa above the downtown crowd",category:"cities",location:"DUBAI"},
     {src:"travel-23.jpg",caption:"A day of discovery",alt:"Anvesh in front of a historic domed building",category:"culture"},
     {src:"travel-24.jpg",caption:"Into the green",alt:"A snow-capped peak above a forested mountain valley",category:"mountains"},
     {src:"travel-25.jpg",caption:"Mountain air",alt:"Snow-covered mountain peaks above a forested valley",category:"mountains"},
@@ -214,7 +214,7 @@
         button.className = "photo-card";
         button.style.setProperty("--i", n);
         button.setAttribute("aria-label", `Open photo ${i + 1}: ${photo.caption}`);
-        button.innerHTML = `<img src="assets/photos/${photo.src}" alt="${photo.alt}" loading="lazy" decoding="async"><span class="photo-card-caption"><span><b>${photo.caption}</b><br><small>TRAVEL JOURNAL</small></span><small>${String(i + 1).padStart(2, "0")}</small></span>`;
+        button.innerHTML = `<img src="assets/photos/${photo.src}" alt="${photo.alt}" loading="lazy" decoding="async"><span class="photo-card-caption"><span><b>${photo.caption}</b><br><small>${photo.location || "TRAVEL JOURNAL"}</small></span><small>${String(i + 1).padStart(2, "0")}</small></span>`;
         const img = $("img", button);
         const loaded = () => img.classList.add("is-loaded");
         if (img.complete) loaded();
@@ -301,6 +301,46 @@
       }
     });
     render();
+  }
+
+  function initMusic() {
+    const button = $("#music-toggle");
+    const audio = $("#journal-audio");
+    const status = $("#music-status");
+    const label = $(".music-toggle-label", button || document);
+    if (!button || !audio || !status || !label) return;
+    audio.volume = 0.18;
+
+    const updatePlaybackState = () => {
+      const playing = !audio.paused;
+      button.setAttribute("aria-pressed", String(playing));
+      button.setAttribute("aria-label", playing ? "Pause ambient music" : "Play ambient music");
+      label.textContent = playing ? "Pause ambient music" : "Play ambient music";
+    };
+    audio.addEventListener("play", updatePlaybackState);
+    audio.addEventListener("pause", updatePlaybackState);
+    audio.addEventListener("ended", updatePlaybackState);
+    audio.addEventListener("error", () => {
+      status.textContent = "Add assets/audio/travel-journal-ambient.mp3 to enable the optional soundtrack.";
+      updatePlaybackState();
+    });
+    button.addEventListener("click", async () => {
+      if (!audio.paused) {
+        audio.pause();
+        status.textContent = "Ambient music paused.";
+        return;
+      }
+      status.textContent = "Loading ambient music…";
+      try {
+        await audio.play();
+        status.textContent = "Ambient music is playing at a gentle volume.";
+      } catch {
+        status.textContent = audio.error
+          ? "Add assets/audio/travel-journal-ambient.mp3 to enable the optional soundtrack."
+          : "Playback could not start. Please try again.";
+        updatePlaybackState();
+      }
+    });
   }
 
   function initSlides() {
@@ -542,6 +582,7 @@
     initCounters();
     initTicker();
     initGallery();
+    initMusic();
     initSlides();
     initReviewForm();
     initBooking();
