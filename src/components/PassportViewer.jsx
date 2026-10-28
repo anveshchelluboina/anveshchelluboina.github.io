@@ -121,10 +121,8 @@ export function PassportViewer() {
     setIsAnimating(true);
     const timers = COUNTRIES.map((country, index) => window.setTimeout(() => {
       setStamps(current => [...current, country]);
-      if (index >= 16) setActiveSpread(3);
-      else if (index >= 8) setActiveSpread(2);
       if (index === COUNTRIES.length - 1) setIsAnimating(false);
-    }, index * 45));
+    }, index * 90));
     return () => timers.forEach(window.clearTimeout);
   }, [isOpen]);
 
