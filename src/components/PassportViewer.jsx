@@ -39,19 +39,19 @@ function PassportFallbackCover({ onOpen, stamps, reducedMotion }) {
   </motion.button>;
 }
 
-function PassportSpread({ stamps, onClose, isAnimating, reducedMotion, stampedCountryId }) {
+function PassportSpread({ stamps, onClose, isAnimating, reducedMotion, stampedCountryId, stampSelection }) {
   const leftPageCountries = stamps.slice(0, 12);
   const rightPageCountries = stamps.slice(12, 24);
   return <motion.div className="passport-open" style={{ transformOrigin: "left center" }} initial={reducedMotion ? false : { rotateY: -82, opacity: 0, scale: 0.94 }} animate={{ rotateY: 0, opacity: 1, scale: 1 }} exit={{ rotateY: reducedMotion ? 0 : -42, opacity: 0, scale: reducedMotion ? 1 : 0.98 }} transition={{ duration: reducedMotion ? 0 : 0.78, ease: [0.2, 0.8, 0.2, 1] }}>
     <div className="passport-page-left">
       <div className="passport-page-heading"><span>ENTRY RECORD · 01—12</span><span>DEPARTURES</span></div>
-      <div className="passport-page-stamps">{leftPageCountries.map((country, index) => <Stamp key={`${country.id}-${country.id === stampedCountryId}`} country={country} index={index} reducedMotion={reducedMotion} isSelected={country.id === stampedCountryId} />)}</div>
+      <div className="passport-page-stamps">{leftPageCountries.map((country, index) => <Stamp key={`${country.id}-${country.id === stampedCountryId ? stampSelection : "idle"}`} country={country} index={index} reducedMotion={reducedMotion} isSelected={country.id === stampedCountryId} />)}</div>
       <small className="passport-page-footer">ANVESH CHELLUBOINA · FIELD NOTES</small>
     </div>
     <span className="passport-spine" aria-hidden="true" />
     <div className="passport-page-right">
       <div className="passport-page-heading"><span>ENTRY RECORD · 13—24</span><span>ARRIVALS</span></div>
-      <div className="passport-page-stamps">{rightPageCountries.map((country, index) => <Stamp key={`${country.id}-${country.id === stampedCountryId}`} country={country} index={index + 12} reducedMotion={reducedMotion} isSelected={country.id === stampedCountryId} />)}</div>
+      <div className="passport-page-stamps">{rightPageCountries.map((country, index) => <Stamp key={`${country.id}-${country.id === stampedCountryId ? stampSelection : "idle"}`} country={country} index={index + 12} reducedMotion={reducedMotion} isSelected={country.id === stampedCountryId} />)}</div>
       <div className="passport-page-controls">
         <span aria-live="polite">{isAnimating ? `STAMPING ${stamps.length} / 24` : "24 COUNTRIES EXPLORED"}</span>
         <button type="button" className="passport-close" onClick={onClose}>Close passport</button>
@@ -60,13 +60,12 @@ function PassportSpread({ stamps, onClose, isAnimating, reducedMotion, stampedCo
   </motion.div>;
 }
 
-function FieldNotesPage({ onClose, onStampCountry, reducedMotion }) {
-  const [iconOnly, setIconOnly] = useState(false);
+function FieldNotesPage({ onClose, onStampCountry, iconOnly, onToggleIconOnly, reducedMotion }) {
   return <motion.div className="passport-field-page" initial={reducedMotion ? false : { opacity: 0, scale: 0.96, rotateY: 10 }} animate={{ opacity: 1, scale: 1, rotateY: 0 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: reducedMotion ? 0 : 0.35 }}>
     <div className="passport-field-heading"><span>FIELD NOTES</span><strong>24 COUNTRIES · 2018—2023</strong></div>
-    <button type="button" className="passport-grid-toggle" aria-pressed={iconOnly} onClick={() => setIconOnly(mode => !mode)}>{iconOnly ? "Show country details" : "Show flags only"}</button>
-    <div className={`passport-flag-grid${iconOnly ? " icon-only-mode" : ""}`}>{COUNTRIES.map((country, index) => <motion.button type="button" className={`passport-flag-entry ${country.style}`} key={country.id} data-country-stamp data-country={country.name} aria-label={`Stamp ${country.name} in the passport`} title={`Stamp ${country.name}`} onClick={() => onStampCountry(country.name)} initial={reducedMotion ? false : { opacity: 0, y: 7 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.2, delay: reducedMotion ? 0 : index * 0.018 }}>
-      <span className="passport-entry-flag" aria-hidden="true">{country.flag}</span><span className="passport-entry-details"><strong>{country.name}</strong><small>{country.code} · {country.date}</small></span>
+    <button type="button" className="passport-grid-toggle" aria-pressed={iconOnly} onClick={onToggleIconOnly}>{iconOnly ? "Show country details" : "Show flags only"}</button>
+    <div id="passport-country-grid" className={`passport-flag-grid${iconOnly ? " icon-only-mode" : ""}`} role="group" aria-label="Countries explored">{COUNTRIES.map((country, index) => <motion.button type="button" layout={!reducedMotion} className={`passport-flag-entry ${country.style}`} key={country.id} data-country-stamp data-country={country.name} aria-label={`Stamp ${country.name} in the passport`} title={`Stamp ${country.name}`} onClick={() => onStampCountry(country.name)} initial={reducedMotion ? false : { opacity: 0, y: 7 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.2, delay: reducedMotion ? 0 : index * 0.018 }}>
+      <span className="passport-entry-flag" aria-hidden="true">{country.flag}</span><span className="passport-entry-details" aria-hidden="true"><strong>{country.name}</strong><small>{country.code} · {country.date}</small></span>
     </motion.button>)}</div>
     <div className="passport-field-footer"><span>ANVESH CHELLUBOINA · TRAVEL ARCHIVE</span><button type="button" className="passport-close" onClick={onClose}>Close passport</button></div>
   </motion.div>;
@@ -89,9 +88,17 @@ export function PassportViewer() {
   const [webglAvailable, setWebglAvailable] = useState(false);
   const [canvasRequested, setCanvasRequested] = useState(false);
   const [stampedCountryId, setStampedCountryId] = useState(null);
+  const [stampSelection, setStampSelection] = useState(0);
+  const [iconOnly, setIconOnly] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const hostRef = useRef(null);
   const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    document.querySelectorAll(".field-notes").forEach(button => {
+      button.setAttribute("aria-pressed", String(iconOnly));
+    });
+  }, [iconOnly]);
 
   const openPassport = useCallback(mode => {
     setPassportMode(mode);
@@ -106,12 +113,17 @@ export function PassportViewer() {
       return;
     }
     setStampedCountryId(country.id);
+    setStampSelection(selection => selection + 1);
     setAnnouncement(`${country.name} passport stamp selected.`);
     openPassport("countries");
   }, [openPassport]);
 
   useEffect(() => {
     const openFieldNotes = () => openPassport("field-notes");
+    const toggleCountryView = () => {
+      setIconOnly(current => !current);
+      openPassport("field-notes");
+    };
     const handleStampCountry = event => stampCountry(event.detail?.country);
     const handleExternalTrigger = event => {
       const trigger = event.target instanceof Element
@@ -122,18 +134,21 @@ export function PassportViewer() {
       if (country) {
         window.dispatchEvent(new CustomEvent("stamp-country", { detail: { country } }));
       } else {
-        window.dispatchEvent(new CustomEvent("passport:open-field-notes"));
+        window.dispatchEvent(new CustomEvent("passport:toggle-country-view"));
       }
+      hostRef.current?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
     };
     window.addEventListener("passport:open-field-notes", openFieldNotes);
+    window.addEventListener("passport:toggle-country-view", toggleCountryView);
     window.addEventListener("stamp-country", handleStampCountry);
     document.addEventListener("click", handleExternalTrigger);
     return () => {
       window.removeEventListener("passport:open-field-notes", openFieldNotes);
+      window.removeEventListener("passport:toggle-country-view", toggleCountryView);
       window.removeEventListener("stamp-country", handleStampCountry);
       document.removeEventListener("click", handleExternalTrigger);
     };
-  }, [openPassport, stampCountry]);
+  }, [openPassport, reducedMotion, stampCountry]);
 
   useEffect(() => {
     const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -196,11 +211,14 @@ export function PassportViewer() {
     <div className="passport-viewer-route" aria-hidden="true" />
     {!isOpen && <div className="passport-viewer-actions" role="group" aria-label="Open passport view">
       <button type="button" onClick={() => openPassport("field-notes")}>FIELD NOTES</button>
-      <button type="button" onClick={() => openPassport("countries")}>24 COUNTRIES EXPLORED</button>
+      <button type="button" aria-pressed={iconOnly} onClick={() => {
+        setIconOnly(current => !current);
+        openPassport("field-notes");
+      }}>24 COUNTRIES EXPLORED</button>
     </div>}
     <div className="passport-object-slot">
       <AnimatePresence mode="wait" initial={false}>
-        {isOpen ? passportMode === "field-notes" ? <FieldNotesPage key="field-notes" onClose={closePassport} onStampCountry={stampCountry} reducedMotion={Boolean(reducedMotion)} /> : <PassportSpread key="country-stamps" stamps={stamps} onClose={closePassport} isAnimating={isAnimating} reducedMotion={Boolean(reducedMotion)} stampedCountryId={stampedCountryId} /> : <div className="passport-cover-stage" key="closed-passport">
+        {isOpen ? passportMode === "field-notes" ? <FieldNotesPage key="field-notes" onClose={closePassport} onStampCountry={stampCountry} iconOnly={iconOnly} onToggleIconOnly={() => setIconOnly(current => !current)} reducedMotion={Boolean(reducedMotion)} /> : <PassportSpread key="country-stamps" stamps={stamps} onClose={closePassport} isAnimating={isAnimating} reducedMotion={Boolean(reducedMotion)} stampedCountryId={stampedCountryId} stampSelection={stampSelection} /> : <div className="passport-cover-stage" key="closed-passport">
           {webglAvailable && canvasRequested && <div className="passport-canvas" aria-hidden="true"><ErrorBoundary onError={() => setWebglAvailable(false)}><Suspense fallback={null}><PassportCanvas onOpen={() => openPassport("countries")} reducedMotion={Boolean(reducedMotion)} hostRef={hostRef} /></Suspense></ErrorBoundary></div>}
           <PassportFallbackCover onOpen={() => openPassport("countries")} stamps={stamps} reducedMotion={Boolean(reducedMotion)} />
         </div>}
