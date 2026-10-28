@@ -48090,19 +48090,19 @@ const M4 = /* @__PURE__ */ pt.forwardRef(function({
 function E4() {
   const o = document.createElement("canvas");
   o.width = 640, o.height = 940;
-  const e = o.getContext("2d");
-  e.fillStyle = "#112A1B", e.fillRect(0, 0, o.width, o.height);
-  let t = 28;
-  for (let a = 0; a < 850; a += 1) {
-    t = t * 16807 % 2147483647;
-    const c = t / 2147483647 * o.width;
-    t = t * 16807 % 2147483647;
-    const f = t / 2147483647 * o.height;
-    e.fillStyle = a % 2 ? "rgba(255,255,255,.025)" : "rgba(0,0,0,.055)", e.fillRect(c, f, 2, 2);
+  const e = o.getContext("2d"), t = e.createLinearGradient(18, 30, 610, 910);
+  t.addColorStop(0, "#10213B"), t.addColorStop(0.52, "#171A22"), t.addColorStop(1, "#4A1F2D"), e.fillStyle = t, e.fillRect(0, 0, o.width, o.height);
+  let r = 28;
+  for (let c = 0; c < 850; c += 1) {
+    r = r * 16807 % 2147483647;
+    const f = r / 2147483647 * o.width;
+    r = r * 16807 % 2147483647;
+    const d = r / 2147483647 * o.height;
+    e.fillStyle = c % 2 ? "rgba(255,255,255,.025)" : "rgba(0,0,0,.055)", e.fillRect(f, d, 2, 2);
   }
   e.strokeStyle = "rgba(207,174,113,.75)", e.lineWidth = 3, e.beginPath(), e.roundRect(30, 30, 580, 880, 22), e.stroke(), e.fillStyle = "#D4AF37", e.textAlign = "center", e.font = "600 24px Georgia, serif", e.fillText("UNITED ARAB EMIRATES", 320, 104), e.beginPath(), e.arc(320, 375, 93, 0, Math.PI * 2), e.stroke(), e.beginPath(), e.arc(320, 375, 78, 0, Math.PI * 2), e.stroke(), e.fillStyle = "#F5F2EB", e.font = "500 55px Georgia, serif", e.fillText("PASSPORT", 320, 548), e.fillStyle = "#D4AF37", e.font = "600 20px sans-serif", e.fillText("FIELD NOTES  ·  24 COUNTRIES", 320, 603);
-  const r = new YR(o);
-  return r.colorSpace = Yr, r.anisotropy = 4, r;
+  const a = new YR(o);
+  return a.colorSpace = Yr, a.anisotropy = 4, a;
 }
 function T4({ onOpen: o, reducedMotion: e }) {
   const t = pt.useRef(), r = pt.useMemo(E4, []), { pointer: a } = OS();
@@ -48110,7 +48110,7 @@ function T4({ onOpen: o, reducedMotion: e }) {
     if (!t.current) return;
     const d = e ? 0 : a.y * 0.12, m = e ? 0 : -a.x * 0.2;
     t.current.rotation.x = Jw.damp(t.current.rotation.x, d, 4, f), t.current.rotation.y = Jw.damp(t.current.rotation.y, m, 4, f);
-  }), /* @__PURE__ */ tn.createElement("group", { ref: t }, /* @__PURE__ */ tn.createElement(M4, { args: [2.12, 3.12, 0.18], radius: 0.09, smoothness: 5, castShadow: !0, receiveShadow: !0, onClick: o }, /* @__PURE__ */ tn.createElement("meshPhysicalMaterial", { color: "#112A1B", roughness: 0.36, metalness: 0.08, clearcoat: 0.3, clearcoatRoughness: 0.42 })), /* @__PURE__ */ tn.createElement("mesh", { position: [0, 0, 0.094], onClick: o }, /* @__PURE__ */ tn.createElement("planeGeometry", { args: [2.08, 3.08] }), /* @__PURE__ */ tn.createElement("meshBasicMaterial", { map: r, transparent: !0, toneMapped: !1 })));
+  }), /* @__PURE__ */ tn.createElement("group", { ref: t }, /* @__PURE__ */ tn.createElement(M4, { args: [2.12, 3.12, 0.18], radius: 0.09, smoothness: 5, castShadow: !0, receiveShadow: !0, onClick: o }, /* @__PURE__ */ tn.createElement("meshPhysicalMaterial", { color: "#171A22", roughness: 0.36, metalness: 0.08, clearcoat: 0.3, clearcoatRoughness: 0.42 })), /* @__PURE__ */ tn.createElement("mesh", { position: [0, 0, 0.094], onClick: o }, /* @__PURE__ */ tn.createElement("planeGeometry", { args: [2.08, 3.08] }), /* @__PURE__ */ tn.createElement("meshBasicMaterial", { map: r, transparent: !0, toneMapped: !1 })));
 }
 function A4({ hostRef: o }) {
   const { gl: e } = OS();

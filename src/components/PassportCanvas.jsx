@@ -9,7 +9,11 @@ function makeCoverTexture() {
   canvas.width = 640;
   canvas.height = 940;
   const context = canvas.getContext("2d");
-  context.fillStyle = "#112A1B";
+  const leather = context.createLinearGradient(18, 30, 610, 910);
+  leather.addColorStop(0, "#10213B");
+  leather.addColorStop(0.52, "#171A22");
+  leather.addColorStop(1, "#4A1F2D");
+  context.fillStyle = leather;
   context.fillRect(0, 0, canvas.width, canvas.height);
   let seed = 28;
   for (let index = 0; index < 850; index += 1) {
@@ -62,7 +66,7 @@ function PassportModel({ onOpen, reducedMotion }) {
 
   return <group ref={group}>
     <RoundedBox args={[2.12, 3.12, 0.18]} radius={0.09} smoothness={5} castShadow receiveShadow onClick={onOpen}>
-      <meshPhysicalMaterial color="#112A1B" roughness={0.36} metalness={0.08} clearcoat={0.3} clearcoatRoughness={0.42} />
+      <meshPhysicalMaterial color="#171A22" roughness={0.36} metalness={0.08} clearcoat={0.3} clearcoatRoughness={0.42} />
     </RoundedBox>
     <mesh position={[0, 0, 0.094]} onClick={onOpen}>
       <planeGeometry args={[2.08, 3.08]} />

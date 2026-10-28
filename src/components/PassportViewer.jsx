@@ -19,7 +19,8 @@ const COUNTRIES = [
 ].map(([name, code, flag, style, date], index) => ({ id: index + 1, name, code, flag, style, date }));
 
 function Stamp({ country, index, reducedMotion }) {
-  return <motion.div className={`immigration-stamp ${country.style}`} style={{ "--rot": `${(index * 17) % 35 - 15}deg` }} initial={reducedMotion ? { scale: 1, opacity: 0.85 } : { scale: 1.4, opacity: 0 }} animate={{ scale: 1, opacity: 0.85 }} transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 430, damping: 22, delay: index * 0.035 }}>
+  const rotation = (index * 17) % 35 - 15;
+  return <motion.div className={`immigration-stamp ${country.style}`} initial={reducedMotion ? false : { y: -52, rotate: rotation - 12, scale: 0.72, opacity: 0 }} animate={{ y: 0, rotate: rotation, scale: 1, opacity: 0.88 }} transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 560, damping: 23, mass: 0.55, delay: index * 0.05 }}>
     <div className="passport-stamp-head"><span>{country.flag}</span><b>{country.code}</b></div>
     <strong>{country.name}</strong>
     <small>{country.date}</small>
@@ -41,7 +42,7 @@ function PassportFallbackCover({ onOpen, stamps, reducedMotion }) {
 function PassportSpread({ activeSpread, setActiveSpread, stamps, onClose, isAnimating, reducedMotion }) {
   const firstIndex = (activeSpread - 1) * 8;
   const spreadCountries = stamps.slice(firstIndex, firstIndex + 8);
-  return <motion.div className="passport-open" initial={reducedMotion ? false : { rotateY: 72, opacity: 0, scale: 0.92 }} animate={{ rotateY: 0, opacity: 1, scale: 1 }} exit={{ rotateY: reducedMotion ? 0 : -35, opacity: 0, scale: reducedMotion ? 1 : 0.96 }} transition={{ duration: reducedMotion ? 0 : 0.55, ease: [0.2, 0.8, 0.2, 1] }}>
+  return <motion.div className="passport-open" style={{ transformOrigin: "left center" }} initial={reducedMotion ? false : { rotateY: -82, opacity: 0, scale: 0.94 }} animate={{ rotateY: 0, opacity: 1, scale: 1 }} exit={{ rotateY: reducedMotion ? 0 : -42, opacity: 0, scale: reducedMotion ? 1 : 0.98 }} transition={{ duration: reducedMotion ? 0 : 0.78, ease: [0.2, 0.8, 0.2, 1] }}>
     <div className="passport-page-left">
       <div className="passport-page-heading"><span>ENTRY RECORD · 0{activeSpread}</span><span>{String(firstIndex + 1).padStart(2, "0")}—{String(Math.min(firstIndex + 8, 24)).padStart(2, "0")}</span></div>
       <div className="passport-page-stamps">{spreadCountries.slice(0, 4).map((country, index) => <Stamp key={country.id} country={country} index={index} reducedMotion={reducedMotion} />)}</div>
@@ -61,6 +62,16 @@ function PassportSpread({ activeSpread, setActiveSpread, stamps, onClose, isAnim
   </motion.div>;
 }
 
+function FieldNotesPage({ onClose, reducedMotion }) {
+  return <motion.div className="passport-field-page" initial={reducedMotion ? false : { opacity: 0, scale: 0.96, rotateY: 10 }} animate={{ opacity: 1, scale: 1, rotateY: 0 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: reducedMotion ? 0 : 0.35 }}>
+    <div className="passport-field-heading"><span>FIELD NOTES</span><strong>24 COUNTRIES · 2018—2023</strong></div>
+    <div className="passport-flag-grid">{COUNTRIES.map((country, index) => <motion.div className={`passport-flag-entry ${country.style}`} key={country.id} initial={reducedMotion ? false : { opacity: 0, y: 7 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reducedMotion ? 0 : 0.2, delay: reducedMotion ? 0 : index * 0.018 }}>
+      <span className="passport-entry-flag" aria-hidden="true">{country.flag}</span><span className="passport-entry-details"><strong>{country.name}</strong><small>{country.code} · {country.date}</small></span>
+    </motion.div>)}</div>
+    <div className="passport-field-footer"><span>ANVESH CHELLUBOINA · TRAVEL ARCHIVE</span><button type="button" className="passport-close" onClick={onClose}>Close passport</button></div>
+  </motion.div>;
+}
+
 function supportsWebGL() {
   try {
     const canvas = document.createElement("canvas");
@@ -72,6 +83,7 @@ function supportsWebGL() {
 
 export function PassportViewer() {
   const [isOpen, setIsOpen] = useState(false);
+  const [passportMode, setPassportMode] = useState("countries");
   const [activeSpread, setActiveSpread] = useState(1);
   const [stamps, setStamps] = useState([]);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -116,15 +128,25 @@ export function PassportViewer() {
 
   useEffect(() => {
     if (!isOpen) return undefined;
-    setStamps([]);
     setActiveSpread(1);
+    if (passportMode === "field-notes") {
+      setStamps(COUNTRIES);
+      setIsAnimating(false);
+      return undefined;
+    }
+    setStamps([]);
     setIsAnimating(true);
     const timers = COUNTRIES.map((country, index) => window.setTimeout(() => {
       setStamps(current => [...current, country]);
       if (index === COUNTRIES.length - 1) setIsAnimating(false);
-    }, index * 90));
+    }, index * 56));
     return () => timers.forEach(window.clearTimeout);
-  }, [isOpen]);
+  }, [isOpen, passportMode]);
+
+  const openPassport = mode => {
+    setPassportMode(mode);
+    setIsOpen(true);
+  };
 
   const closePassport = () => {
     setIsOpen(false);
@@ -134,15 +156,18 @@ export function PassportViewer() {
 
   return <div className="passport-viewer" ref={hostRef}>
     <div className="passport-viewer-route" aria-hidden="true" />
+    {!isOpen && <div className="passport-viewer-actions" role="group" aria-label="Open passport view">
+      <button type="button" onClick={() => openPassport("field-notes")}>FIELD NOTES</button>
+      <button type="button" onClick={() => openPassport("countries")}>24 COUNTRIES EXPLORED</button>
+    </div>}
     <div className="passport-object-slot">
       <AnimatePresence mode="wait" initial={false}>
-        {isOpen ? <PassportSpread key="open-passport" activeSpread={activeSpread} setActiveSpread={setActiveSpread} stamps={stamps} onClose={closePassport} isAnimating={isAnimating} reducedMotion={Boolean(reducedMotion)} /> : <div className="passport-cover-stage" key="closed-passport">
-          {webglAvailable && canvasRequested && <div className="passport-canvas" aria-hidden="true"><ErrorBoundary onError={() => setWebglAvailable(false)}><Suspense fallback={null}><PassportCanvas onOpen={() => setIsOpen(true)} reducedMotion={Boolean(reducedMotion)} hostRef={hostRef} /></Suspense></ErrorBoundary></div>}
-          <PassportFallbackCover onOpen={() => setIsOpen(true)} stamps={stamps} reducedMotion={Boolean(reducedMotion)} />
+        {isOpen ? passportMode === "field-notes" ? <FieldNotesPage key="field-notes" onClose={closePassport} reducedMotion={Boolean(reducedMotion)} /> : <PassportSpread key="country-stamps" activeSpread={activeSpread} setActiveSpread={setActiveSpread} stamps={stamps} onClose={closePassport} isAnimating={isAnimating} reducedMotion={Boolean(reducedMotion)} /> : <div className="passport-cover-stage" key="closed-passport">
+          {webglAvailable && canvasRequested && <div className="passport-canvas" aria-hidden="true"><ErrorBoundary onError={() => setWebglAvailable(false)}><Suspense fallback={null}><PassportCanvas onOpen={() => openPassport("countries")} reducedMotion={Boolean(reducedMotion)} hostRef={hostRef} /></Suspense></ErrorBoundary></div>}
+          <PassportFallbackCover onOpen={() => openPassport("countries")} stamps={stamps} reducedMotion={Boolean(reducedMotion)} />
         </div>}
       </AnimatePresence>
     </div>
-    <div className="passport-viewer-caption"><span>FIELD NOTES</span><span>24 COUNTRIES EXPLORED</span></div>
     <span className="sr-only" role="status" aria-live="polite">{isOpen ? "Passport opened. Country stamps are being revealed." : "Passport closed."}</span>
   </div>;
 }
