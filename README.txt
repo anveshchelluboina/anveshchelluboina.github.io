@@ -6,7 +6,7 @@
 - `flapboard.css` contains the shared responsive styles.
 - `flapboard.js` contains the gallery, lightbox, mobile navigation, slides, and review form behavior.
 - `src/components/HeroSection.jsx` composes the split-screen editorial hero.
-- `src/components/PassportViewer.jsx` contains the accessible CSS passport, 24 supplied country stamps, and passport spreads.
+- `src/components/PassportViewer.jsx` contains the accessible CSS passport, 23 supplied country stamps with inline SVG flags, and passport spreads.
 - `src/components/PassportCanvas.jsx` is the lazy-loaded React Three Fiber / Drei 3D scene.
 - `src/components/FlightPaths.jsx` renders the animated, visibility-aware SVG routes.
 - `src/styles/passport.css` contains the modular hero, fallback, and stamp styles.

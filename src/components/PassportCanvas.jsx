@@ -31,8 +31,6 @@ function makeCoverTexture() {
   context.stroke();
   context.fillStyle = "#D4AF37";
   context.textAlign = "center";
-  context.font = "600 24px Georgia, serif";
-  context.fillText("UNITED ARAB EMIRATES", 320, 104);
   context.beginPath();
   context.arc(320, 375, 93, 0, Math.PI * 2);
   context.stroke();
@@ -44,7 +42,7 @@ function makeCoverTexture() {
   context.fillText("PASSPORT", 320, 548);
   context.fillStyle = "#D4AF37";
   context.font = "600 20px sans-serif";
-  context.fillText("FIELD NOTES  ·  24 COUNTRIES", 320, 603);
+  context.fillText("FIELD NOTES  ·  23 COUNTRIES", 320, 603);
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = 4;

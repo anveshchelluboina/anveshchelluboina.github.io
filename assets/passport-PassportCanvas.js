@@ -39901,7 +39901,7 @@ function NN() {
     const c = n / 2147483647 * s.height;
     e.fillStyle = a % 2 ? "rgba(255,255,255,.025)" : "rgba(0,0,0,.055)", e.fillRect(l, c, 2, 2);
   }
-  e.strokeStyle = "rgba(207,174,113,.75)", e.lineWidth = 3, e.beginPath(), e.roundRect(30, 30, 580, 880, 22), e.stroke(), e.fillStyle = "#D4AF37", e.textAlign = "center", e.font = "600 24px Georgia, serif", e.fillText("UNITED ARAB EMIRATES", 320, 104), e.beginPath(), e.arc(320, 375, 93, 0, Math.PI * 2), e.stroke(), e.beginPath(), e.arc(320, 375, 78, 0, Math.PI * 2), e.stroke(), e.fillStyle = "#F5F2EB", e.font = "500 55px Georgia, serif", e.fillText("PASSPORT", 320, 548), e.fillStyle = "#D4AF37", e.font = "600 20px sans-serif", e.fillText("FIELD NOTES  ·  24 COUNTRIES", 320, 603);
+  e.strokeStyle = "rgba(207,174,113,.75)", e.lineWidth = 3, e.beginPath(), e.roundRect(30, 30, 580, 880, 22), e.stroke(), e.fillStyle = "#D4AF37", e.textAlign = "center", e.beginPath(), e.arc(320, 375, 93, 0, Math.PI * 2), e.stroke(), e.beginPath(), e.arc(320, 375, 78, 0, Math.PI * 2), e.stroke(), e.fillStyle = "#F5F2EB", e.font = "500 55px Georgia, serif", e.fillText("PASSPORT", 320, 548), e.fillStyle = "#D4AF37", e.font = "600 20px sans-serif", e.fillText("FIELD NOTES  ·  23 COUNTRIES", 320, 603);
   const r = new Gb(s);
   return r.colorSpace = On, r.anisotropy = 4, r;
 }
