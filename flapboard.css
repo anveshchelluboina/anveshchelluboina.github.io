@@ -291,6 +291,18 @@ h4{font-size:var(--font-subheading);line-height:1.3}
   .invitation-actions{gap:16px}
   .invitation-actions .text-link{font-size:13px}
 }
+.experience-section{position:relative;isolation:isolate;border:0;color:var(--paper)}
+.experience-section::before{position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background-color:var(--green);background-image:repeating-linear-gradient(0deg,transparent 0 47px,rgba(247,245,239,.035) 48px,transparent 49px),repeating-linear-gradient(90deg,transparent 0 47px,rgba(247,245,239,.035) 48px,transparent 49px);content:""}
+.experience-heading h2{color:var(--paper)}
+.experience-heading h2 em{color:#d4b783}
+.experience-heading .section-label{color:#d4b783}
+.experience-copy{color:rgba(247,245,239,.82)}
+.experience-skills span{border-color:rgba(247,245,239,.24);background:rgba(247,245,239,.035);color:var(--paper)}
+.travel-invitation{border-color:transparent}
+.invitation-aside{position:relative;isolation:isolate;min-width:220px;padding:14px;border:1px solid rgba(181,141,82,.55);background-image:url("assets/photos/travel-25.jpg");background-position:center 55%;background-size:cover}
+.invitation-aside::before{position:absolute;z-index:-1;inset:0;background:rgba(247,245,239,.22);content:""}
+.field-notes{background:var(--paper)}
+.music-control{padding:5px 9px;background:var(--paper)}
 @media(prefers-reduced-motion:reduce){
   .passport-route-plane{display:none!important}
   .passport-plane-still{display:block!important}
